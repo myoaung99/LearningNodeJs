@@ -11,6 +11,10 @@ const app = express();
 //  return middleware function and call next()
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// serve static file
+// give file system access for the public folder
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(shopRoutes.router);
 app.use("/admin", adminRoutes);
 

@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(shopRoutes.router);
-app.use(adminRoutes);
+app.use("/admin", adminRoutes);
 
 // handle 404 page at last middleware
 app.use("*", (req, res) => {

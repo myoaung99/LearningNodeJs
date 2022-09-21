@@ -11,4 +11,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(shopRoutes.router);
 app.use(adminRoutes);
 
+// handle 404 page at last middleware
+app.use("*", (req, res) => {
+  res.status(404).send("<h1>Page not found!</h1>");
+});
+
 app.listen(3000);

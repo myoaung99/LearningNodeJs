@@ -6,7 +6,6 @@ const router = express.Router();
 // __dirname is the directory name of calling module
 // sendFile is use to send files
 router.get("/", (req, res) => {
-  console.log(path.join(__dirname, "../", "views", "shop.html"));
   res.sendFile(path.join(__dirname, "../", "views", "shop.html"));
 });
 

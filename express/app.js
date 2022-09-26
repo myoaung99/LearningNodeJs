@@ -4,7 +4,7 @@ const rootDir = require("./utils/path.js");
 
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
-const adminData = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 const app = express();
@@ -22,8 +22,8 @@ app.set("views", "views");
 // give file system access for the public folder
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(shopRoutes.router);
-app.use("/admin", adminData.router); // filter
+app.use(shopRoutes);
+app.use("/admin", adminRoutes); // filter
 
 // handle 404 page at last middleware
 app.use("*", (req, res) => {

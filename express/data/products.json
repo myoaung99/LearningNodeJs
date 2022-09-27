@@ -1,1 +1,1 @@
-[{"title":"Book"},{"title":"New Book"},{"title":"New Book 2"}]
+[{"title":"First Book","imageUrl":"https://images.unsplash.com/photo-1594312915251-48db9280c8f1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTl8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80","description":"A great book","price":"19.99"},{"title":"Second Book","imageUrl":"https://images.unsplash.com/photo-1544716278-e513176f20b5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTJ8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80","description":"One and only book you need to read ","price":"20.00"}]

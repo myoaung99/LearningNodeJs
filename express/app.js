@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const rootDir = require("./utils/path.js");
 
-const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -25,4 +24,4 @@ app.use("/admin", adminRoutes); // filter
 // handle 404 page at last middleware
 app.use("*", get404);
 
-app.listen(3000);
+app.listen(5000);

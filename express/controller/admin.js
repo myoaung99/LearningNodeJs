@@ -1,9 +1,12 @@
 const Product = require("../models/product");
 
 exports.getAdminProducts = (req, res) => {
-  res.render("admin/product-list", {
-    docName: "All Product",
-    path: "/admin/product-list",
+  Product.fetchAll((products) => {
+    return res.render("admin/product-list", {
+      prods: products,
+      docName: "All Products",
+      path: "/admin/product-list",
+    });
   });
 };
 
@@ -30,5 +33,10 @@ exports.getEditProduct = (req, res) => {
 
 exports.postEditProduct = (req, res) => {
   // add product editing logic
+  res.redirect("/admin/product-list");
+};
+
+exports.postDeleteProduct = (req, res) => {
+  // add product delete logic
   res.redirect("/admin/product-list");
 };

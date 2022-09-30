@@ -42,10 +42,36 @@ module.exports = class Cart {
         updatingCart = [...cart.products, { id: id, qty: 1 }];
       }
 
-      cart.totalPrice = (cart.totalPrice + +price).toFixed(2);
+      // console.log("Updating cart :", updatingCart);
+
+      cart.totalPrice = (+cart.totalPrice + +price).toFixed(2);
       cart.products = updatingCart;
 
       fs.writeFile(p, JSON.stringify(cart), (err) => {
+        console.log(err);
+      });
+    });
+  }
+
+  static removeProduct(id, price) {
+    fs.readFile(p, (err, fileContent) => {
+      // if there is an error, it means we don't have any product to delete in cart
+      if (err) {
+        return;
+      }
+
+      const cart = JSON.parse(fileContent);
+      console.log("Cart :", cart);
+
+      const product = cart.products.find((p) => p.id === id);
+      const updatingCart = { ...cart };
+
+      updatingCart.products = updatingCart.products.filter((p) => p.id !== id);
+      const productQty = product?.qty;
+      updatingCart.totalPrice = updatingCart.totalPrice - productQty * price;
+
+      console.log("Updating cart :", JSON.stringify(updatingCart));
+      fs.writeFile(p, JSON.stringify(updatingCart), (err) => {
         console.log(err);
       });
     });

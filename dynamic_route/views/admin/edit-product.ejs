@@ -21,11 +21,9 @@
                 <label for="price">Price</label>
                 <input type="number" name="price" id="price" step="0.01" value="<%= editMode ? product.price : '' %>">
             </div>
-            <div class="form-control">
+            <div class="form-control" > 
                 <label for="description">Description</label>
-                <textarea name="description" id="description" rows="5">
-                  <%= editMode ? product.description : '' %>
-                </textarea>
+                <textarea name="description" id="description" rows="5" ><%= editMode ? product.description : '' %></textarea>
             </div>
 
             <button class="btn" type="submit"><%= editMode ? 'Update Product' : 'Add Product'%></button>

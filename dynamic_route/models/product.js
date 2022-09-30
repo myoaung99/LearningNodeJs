@@ -18,21 +18,40 @@ const getProductsFromFile = (cb) => {
 };
 
 module.exports = class Product {
-  constructor(title, imageUrl, description, price) {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
     this.description = description;
     this.price = price;
   }
 
+  // newly created product instance don't have id props yet
+  // only editing ones have the ids when they are instantiated
+
+  //so
+  // if there is id => do updating process
+  // if there is null id => do new product creating process
   save() {
-    this.id = Math.random().toString();
-    getProductsFromFile((products) => {
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), (err) => {
-        console.log(err);
+    if (this.id) {
+      getProductsFromFile((prods) => {
+        const updatingProductIndex = prods.findIndex((p) => p.id === this.id);
+        const updatingProducts = [...prods];
+        updatingProducts[updatingProductIndex] = this;
+
+        fs.writeFile(p, JSON.stringify(updatingProducts), (err) =>
+          console.log(err)
+        );
       });
-    });
+    } else {
+      this.id = Math.random().toString();
+      getProductsFromFile((products) => {
+        products.push(this);
+        fs.writeFile(p, JSON.stringify(products), (err) => {
+          console.log(err);
+        });
+      });
+    }
   }
 
   static fetchAll(cb) {

@@ -36,6 +36,7 @@ module.exports = class Product {
     if (this.id) {
       getProductsFromFile((prods) => {
         const updatingProductIndex = prods.findIndex((p) => p.id === this.id);
+        console.log("updating prod index :", updatingProductIndex);
         const updatingProducts = [...prods];
         updatingProducts[updatingProductIndex] = this;
 

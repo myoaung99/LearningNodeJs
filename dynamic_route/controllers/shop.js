@@ -33,9 +33,25 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render("shop/cart", {
-    path: "/cart",
-    pageTitle: "Your Cart",
+  // return products that are include in cart database
+  // catch 1 => only id and qty fields are avaliable in cart system
+  // catch 2 => we need a way to figuring out full product infos base on these ids
+  Cart.getCartProducts((cart) => {
+    Product.fetchAll((products) => {
+      const cartProducts = [];
+
+      for (const product of products) {
+        const cartProduct = cart.products.find((p) => p.id === product.id);
+        if (cartProduct) {
+          cartProducts.push({ productData: product, qty: cartProduct.qty });
+        }
+      }
+      res.render("shop/cart", {
+        path: "/cart",
+        pageTitle: "Your Cart",
+        products: cartProducts,
+      });
+    });
   });
 };
 

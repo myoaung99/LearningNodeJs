@@ -9,7 +9,8 @@
 //
 // module.exports = connection.promise();
 
-const Sequelize = require("sequelize");
+// class constructor
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("node-complete", "root", "myomyintaung", {
   host: "localhost",

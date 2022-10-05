@@ -8,16 +8,20 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
-exports.postAddProduct = (req, res, next) => {
+exports.postAddProduct = async (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(null, title, imageUrl, description, price);
-  product
-    .save()
-    .then(() => res.redirect("/"))
-    .catch((err) => console.log(err));
+
+  const newProduct = await Product.create({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description,
+  });
+
+  console.log("New products auto-generated ID: ", newProduct.id);
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -58,11 +62,11 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
-      .then(([rows, field]) => {
-        return res.render("admin/products", {
-          prods: rows,
-          pageTitle: "Admin Products",
-          path: "/admin/products",
+    .then(([rows, field]) => {
+      return res.render("admin/products", {
+        prods: rows,
+        pageTitle: "Admin Products",
+        path: "/admin/products",
       });
     })
     .catch((err) => console.log(err));

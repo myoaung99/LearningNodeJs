@@ -15,6 +15,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
+  // we can also use findAll with where keyword
   Product.findByPk(prodId)
     .then((product) => {
       return res.render("shop/product-detail", {

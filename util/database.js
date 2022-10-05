@@ -4,14 +4,13 @@ const MongoClient = mongodb.MongoClient;
 
 let _db;
 
-const mongoConnect = (callback) => {
-  MongoClient.connect(
+const mongoConnect = async () => {
+  return MongoClient.connect(
     "mongodb+srv://myomyintaung:OVa2HIyWVYnVN4xN@cluster0.torxfu9.mongodb.net/?retryWrites=true&w=majority"
   )
     .then((client) => {
-      callback();
-      _db = client.db();
-      console.log("Connected Successfully!");
+      _db = client.db("shop");
+      console.log("Connected to shop db Successfully!");
     })
     .catch((err) => {
       console.log(err);

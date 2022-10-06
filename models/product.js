@@ -3,7 +3,7 @@ const {getDb} = require("./../util/database");
 
 module.exports = class Product {
     constructor(id, title, imageUrl, description, price) {
-        this._id = new ObjectId(id);
+        this._id = id && new ObjectId(id);
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -48,6 +48,7 @@ module.exports = class Product {
         } else {
             dbOp = db.collection("products").insertOne(this)
         }
+
 
         return dbOp.then((result) =>
             console.log("New product's id: ", result.insertedId.toString())

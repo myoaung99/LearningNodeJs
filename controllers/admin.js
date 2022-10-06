@@ -14,7 +14,7 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
 
-    const product = new Product(title, imageUrl, description, price);
+    const product = new Product(null, title, imageUrl, description, price);
     product
         .save()
         .then(() => {
@@ -58,7 +58,7 @@ exports.getProducts = (req, res, next) => {
         return res.render("admin/products", {
             prods: products,
             pageTitle: "All Products",
-            path: "/products",
+            path: "/admin/products",
         });
     }).catch(err => console.log(err))
 };

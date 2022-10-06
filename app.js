@@ -1,12 +1,12 @@
 const path = require("path");
-
+const User = require('./models/user');
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
 
 const app = express();
-const { mongoConnect } = require("./util/database");
+const {mongoConnect} = require("./util/database");
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -14,17 +14,17 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, "public")));
 
+// middleware that checks who is requesting for every requests
 app.use((req, res, next) => {
-  // User.findById(1)
-  //   .then(user => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch(err => console.log(err));
-  next();
+    User.findById('633ea4ebb52a91402c028c62')
+        .then((user) => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err))
 });
 
 app.use("/admin", adminRoutes);
@@ -32,4 +32,7 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect().then(() => app.listen(3000));
+mongoConnect().then(() => {
+    app.listen(3000);
+});
+

@@ -1,34 +1,75 @@
-const {getDb} = require("../util/database");
-const {ObjectId} = require("mongodb");
+const { getDb } = require("../util/database");
+const { ObjectId } = require("mongodb");
 
 class User {
-    constructor(name, email) {
-        this.name = name;
-        this.email = email;
+  constructor(name, email, cart, id) {
+    this.name = name;
+    this.email = email;
+    this.cart = cart; // {items: []}
+    this._id = id;
+  }
+
+  static findById(userId) {
+    // find single user
+    const db = getDb();
+    return db
+      .collection("users")
+      .findOne({ _id: new ObjectId(userId) })
+      .then((result) => {
+        console.log("Found user: ", result);
+        return result;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  addToCart(product) {
+    const cartProductIndex = this.cart.items.findIndex(
+      (cp) => cp._id.toString() === product._id.toString()
+    );
+
+    let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items];
+
+    // add to cart က ရှိပြီးသား product ဆိုရင် quantity ကို တိုးပေးရမယ်
+    // မရှိသေးတဲ့ product အသစ်ဆိုရင် push လုပ်ပေးရမယ်
+
+    if (cartProductIndex >= 0) {
+      newQuantity = updatedCartItems[cartProductIndex].quantity + 1;
+      updatedCartItems[cartProductIndex].quantity = newQuantity;
+    } else {
+      updatedCartItems.push({ _id: product._id, quantity: 1 });
     }
 
-    static findById(userId) {
-        // find single user
-        const db = getDb();
-        return db
-            .collection('users')
-            .findOne({_id: new ObjectId(userId)})
-            .then(result => {
-                console.log('Found user: ', result)
-                return result
-            })
-            .catch(err => console.log(err))
-    }
+    const db = getDb();
+    return db
+      .collection("users")
+      .updateOne(
+        { _id: this._id },
+        { $set: { cart: { items: updatedCartItems } } }
+      );
+  }
 
-    save() {
-        // save user
-        const db = getDb();
-        return db
-            .collection('users')
-            .insertOne(this)
-            .then(result => console.log('Created user successfully!'))
-            .catch(err => console.log(err))
-    }
+  fetchCartProducts() {
+    const db = getDb();
+    return db
+      .collection("users")
+      .findOne({ _id: this._id }, { projection: { cart: 1 } })
+      .then((products) => {
+        console.log("Cart products", products);
+        return products;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  save() {
+    // save user
+    const db = getDb();
+    return db
+      .collection("users")
+      .insertOne(this)
+      .then((result) => console.log("Created user successfully!"))
+      .catch((err) => console.log(err));
+  }
 }
 
 module.exports = User;

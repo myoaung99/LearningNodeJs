@@ -1,5 +1,6 @@
 const { getDb } = require("../util/database");
 const { ObjectId } = require("mongodb");
+const Product = require("./product");
 
 class User {
   constructor(name, email, cart, id) {
@@ -51,12 +52,20 @@ class User {
 
   fetchCartProducts() {
     const db = getDb();
+    const productIds = this.cart.items.map((p) => p._id);
     return db
-      .collection("users")
-      .findOne({ _id: this._id }, { projection: { cart: 1 } })
+      .collection("products")
+      .find({ _id: { $in: productIds } })
+      .toArray()
       .then((products) => {
-        console.log("Cart products", products);
-        return products;
+        return products.map((p) => {
+          return {
+            ...p,
+            quantity: this.cart.items.find(
+              (i) => i._id.toString() === p._id.toString()
+            ).quantity,
+          };
+        });
       })
       .catch((err) => console.log(err));
   }

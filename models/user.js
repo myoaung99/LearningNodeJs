@@ -23,6 +23,19 @@ class User {
       .catch((err) => console.log(err));
   }
 
+  order() {
+    const db = getDb();
+    return db
+      .collection("orders")
+      .insertOne(this.cart)
+      .then(() => {
+        return db
+          .collection("users")
+          .updateOne({ _id: this._id }, { $set: { cart: { items: [] } } });
+      })
+      .catch((err) => console.log(err));
+  }
+
   addToCart(product) {
     let updatedCartItems = [];
 
@@ -51,27 +64,6 @@ class User {
         { $set: { cart: { items: updatedCartItems } } }
       );
   }
-
-  // deleteFromCart(productId) {
-  //   const db = getDb();
-  //   const updateCartProducts = this.cart.items.filter(
-  //     (p) => p._id.toString() !== productId
-  //   );
-  //   return db
-  //     .collection("users")
-  //     .updateOne(
-  //       { _id: this._id },
-  //       {
-  //         $set: {
-  //           cart: {
-  //             items: updateCartProducts,
-  //           },
-  //         },
-  //       }
-  //     )
-  //     .then((p) => console.log("Delete product: ", p))
-  //     .catch((err) => console.log(err));
-  // }
 
   fetchCartProducts() {
     const db = getDb();

@@ -24,12 +24,14 @@ class User {
   }
 
   addToCart(product) {
+    let updatedCartItems = [];
+
     const cartProductIndex = this.cart.items.findIndex(
       (cp) => cp._id.toString() === product._id.toString()
     );
 
     let newQuantity = 1;
-    const updatedCartItems = [...this.cart.items];
+    updatedCartItems = [...this.cart.items];
 
     // add to cart က ရှိပြီးသား product ဆိုရင် quantity ကို တိုးပေးရမယ်
     // မရှိသေးတဲ့ product အသစ်ဆိုရင် push လုပ်ပေးရမယ်
@@ -50,9 +52,30 @@ class User {
       );
   }
 
+  // deleteFromCart(productId) {
+  //   const db = getDb();
+  //   const updateCartProducts = this.cart.items.filter(
+  //     (p) => p._id.toString() !== productId
+  //   );
+  //   return db
+  //     .collection("users")
+  //     .updateOne(
+  //       { _id: this._id },
+  //       {
+  //         $set: {
+  //           cart: {
+  //             items: updateCartProducts,
+  //           },
+  //         },
+  //       }
+  //     )
+  //     .then((p) => console.log("Delete product: ", p))
+  //     .catch((err) => console.log(err));
+  // }
+
   fetchCartProducts() {
     const db = getDb();
-    const productIds = this.cart.items.map((p) => p._id);
+    const productIds = this.cart?.items.map((p) => p._id);
     return db
       .collection("products")
       .find({ _id: { $in: productIds } })

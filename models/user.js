@@ -45,6 +45,16 @@ class User {
       .catch((err) => console.log(err));
   }
 
+  getOrders() {
+    const db = getDb();
+    return db
+      .collection("orders")
+      .find({ "user._id": this._id })
+      .toArray()
+      .then((orders) => orders)
+      .catch((err) => console.log(err));
+  }
+
   addToCart(product) {
     let updatedCartItems = [];
 

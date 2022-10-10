@@ -23,11 +23,20 @@ class User {
       .catch((err) => console.log(err));
   }
 
-  order() {
+  addOrder() {
     const db = getDb();
-    return db
-      .collection("orders")
-      .insertOne(this.cart)
+    return this.fetchCartProducts()
+      .then((products) => {
+        const orders = {
+          items: products,
+          user: {
+            _id: this._id,
+            name: this.name,
+            email: this.email,
+          },
+        };
+        return db.collection("orders").insertOne(orders);
+      })
       .then(() => {
         return db
           .collection("users")

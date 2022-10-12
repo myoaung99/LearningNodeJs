@@ -17,7 +17,6 @@ class User {
       .collection("users")
       .findOne({ _id: new ObjectId(userId) })
       .then((result) => {
-        console.log("Found user: ", result);
         return result;
       })
       .catch((err) => console.log(err));

@@ -11,6 +11,7 @@ module.exports = class Product {
     this.userId = userId;
   }
 
+  // return all product with array structure
   static fetchAll() {
     const db = getDb();
     return db
@@ -23,6 +24,7 @@ module.exports = class Product {
       .catch((err) => console.log(err));
   }
 
+  // get one product that match with the given id
   static fetchById(id) {
     const db = getDb();
     return db
@@ -34,6 +36,7 @@ module.exports = class Product {
       .catch((err) => console.log(err));
   }
 
+  // delet product that match with id
   static deleteById(id) {
     const db = getDb();
     return db

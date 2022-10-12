@@ -1,9 +1,9 @@
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const {mongoose} = require('mongoose')
+const mongoose = require("mongoose");
 
-const User = require('./models/user');
+const User = require("./models/user");
 const errorController = require("./controllers/error");
 
 const app = express();
@@ -14,7 +14,7 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // middleware that checks who is requesting for every requests
@@ -33,6 +33,8 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoose
-    .connect('mongodb+srv://myomyintaung:4EvwakdYAaFx9s7s@cluster0.torxfu9.mongodb.net/?retryWrites=true&w=majority')
-    .then(result => app.listen(3000))
-    .catch(err => console.log(err))
+  .connect(
+    "mongodb+srv://myomyintaung:4EvwakdYAaFx9s7s@cluster0.torxfu9.mongodb.net/shop?retryWrites=true&w=majority"
+  )
+  .then((result) => app.listen(3000))
+  .catch((err) => console.log(err));

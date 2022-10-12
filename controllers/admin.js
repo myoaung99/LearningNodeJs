@@ -1,3 +1,4 @@
+const { ObjectId } = require("bson");
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
@@ -35,7 +36,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const prodId = req.params.productId;
-  Product.fetchById(prodId)
+  Product.findById(prodId)
     .then((product) => {
       return res.render("admin/edit-product", {
         pageTitle: "Edit Product",
@@ -54,23 +55,18 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
-  const product = new Product(
-    prodId,
-    updatedTitle,
-    updatedImageUrl,
-    updatedDesc,
-    updatedPrice,
-    req.user._id
-  );
-
-  product
-    .save()
+  Product.findByIdAndUpdate(prodId, {
+    title: updatedTitle,
+    imageUrl: updatedImageUrl,
+    description: updatedDesc,
+    price: updatedPrice,
+  })
     .then(() => res.redirect("/admin/products"))
     .catch((err) => console.log(err));
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       return res.render("admin/products", {
         prods: products,
@@ -83,7 +79,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId)
+  Product.findByIdAndDelete(prodId)
     .then(() => res.redirect("/admin/products"))
     .catch((err) => console.log(err));
 };

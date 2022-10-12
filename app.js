@@ -18,14 +18,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // middleware that checks who is requesting for every requests
-// app.use((req, res, next) => {
-//     User.findById('633ea4ebb52a91402c028c62')
-//         .then((user) => {
-//             req.user = new User(user.name, user.email, user.cart, user._id);
-//             next();
-//         })
-//         .catch(err => console.log(err))
-// });
+app.use((req, res, next) => {
+  User.findById("6346975ebcf72f867a127686")
+    .then((user) => {
+      req.user = user;
+      console.log(user);
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -36,5 +37,18 @@ mongoose
   .connect(
     "mongodb+srv://myomyintaung:4EvwakdYAaFx9s7s@cluster0.torxfu9.mongodb.net/shop?retryWrites=true&w=majority"
   )
-  .then((result) => app.listen(3000))
+  .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: "Myo",
+          email: "myo@email.com",
+          cart: { items: [] },
+        });
+        user.save();
+      }
+    });
+
+    return app.listen(3000);
+  })
   .catch((err) => console.log(err));

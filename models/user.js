@@ -24,6 +24,30 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.methods.addToCart = function (product) {
+  const cartProductIndex = this.cart.items.findIndex((cp) => {
+    return cp.productId.toString() === product._id.toString();
+  });
+
+  console.log(cartProductIndex);
+
+  let newQuantity = 1;
+  let updatedCart = [...this.cart.items];
+
+  // add to cart က ရှိပြီးသား product ဆိုရင် quantity ကို တိုးပေးရမယ်
+  // မရှိသေးတဲ့ product အသစ်ဆိုရင် push လုပ်ပေးရမယ်
+
+  if (cartProductIndex >= 0) {
+    newQuantity = updatedCart[cartProductIndex].quantity + 1;
+    updatedCart[cartProductIndex].quantity = newQuantity;
+  } else {
+    updatedCart.push({ productId: product._id, quantity: 1 });
+  }
+
+  this.cart.items = updatedCart;
+  return this.save();
+};
+
 module.exports = new mongoose.model("User", userSchema);
 
 // const { getDb } = require("../util/database");

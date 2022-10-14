@@ -21,6 +21,7 @@ const userSchema = new Schema({
         quantity: { type: Number, required: true },
       },
     ],
+    total: { type: Number, required: true },
   },
 });
 
@@ -29,10 +30,9 @@ userSchema.methods.addToCart = function (product) {
     return cp.productId.toString() === product._id.toString();
   });
 
-  console.log(cartProductIndex);
-
   let newQuantity = 1;
   let updatedCart = [...this.cart.items];
+  let total = 0;
 
   // add to cart က ရှိပြီးသား product ဆိုရင် quantity ကို တိုးပေးရမယ်
   // မရှိသေးတဲ့ product အသစ်ဆိုရင် push လုပ်ပေးရမယ်
@@ -40,11 +40,14 @@ userSchema.methods.addToCart = function (product) {
   if (cartProductIndex >= 0) {
     newQuantity = updatedCart[cartProductIndex].quantity + 1;
     updatedCart[cartProductIndex].quantity = newQuantity;
+    total = total + newQuantity * product.price;
   } else {
     updatedCart.push({ productId: product._id, quantity: 1 });
+    total = total + product.price;
   }
 
   this.cart.items = updatedCart;
+  this.cart.total = total;
   return this.save();
 };
 
@@ -53,6 +56,11 @@ userSchema.methods.deleteFromCart = function (productId) {
     return cp.productId.toString() !== productId;
   });
   this.cart.items = updatedCartItems;
+  return this.save();
+};
+
+userSchema.methods.clearCart = function () {
+  this.cart.items = [];
   return this.save();
 };
 

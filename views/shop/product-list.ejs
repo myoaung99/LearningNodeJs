@@ -28,7 +28,10 @@
                                 </div>
                                 <div class="card__actions">
                                     <a href="/products/<%= product._id.toString() %>" class="btn">Details</a>
-                                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                    <% if(isLogin) { %>
+                                        <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+
+                                    <% } %>
                                 </div>
                             </article>
                             <% } %>
